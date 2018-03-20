@@ -1,0 +1,53 @@
+1) select c.nome_curso, d.nome_disciplina from curso c inner join disciplina d on c.id_curso = d.id_curso;
+2) select p.nome_professor, a.nome from professor p inner join area a using(id_area);
+3) select t.id_turma, t.semestre, a.nome_aluno, ta.media_final 
+from turma t inner join turma_aluno ta on (t.id_turma = ta.id_turma) 
+inner join aluno a on (ta.id_aluno = a.id_aluno);
+4) select a.nome_aluno, c.nome_curso from aluno a inner join aluno_curso ac on (a.id_aluno = ac.id_aluno) inner join curso c on (ac.id_curso = c.id_curso) where ac.data_fim IS NULL;
+5) select t.id_turma, d.nome_disciplina, p.nome_professor from turma t inner join disciplina d on (t.id_disciplina = d.id_disciplina) inner join professor p on (t.id_professor = p.id_professor);
+6) select d.nome_disciplina, ta.media_final from disciplina d inner join turma t on (d.id_disciplina = t.id_disciplina) inner join turma_aluno ta on(t.id_turma = ta.id_turma) inner join aluno a on (a.id_aluno = ta.id_aluno) where a.nome_aluno = 'Bruno' AND t.semestre = 3;
+7) select a.nome_aluno from disciplina d inner join turma t on (d.id_disciplina = t.id_disciplina) inner join turma_aluno ta on(t.id_turma = ta.id_turma) inner join aluno a on (a.id_aluno = ta.id_aluno);
+8) select count(*) as alunos_matriculados from turma t inner join turma_aluno ta on (t.id_turma = ta.id_turma) where semestre = 2;
+9) select avg(ta.media_final) as media_alunos from turma t inner join turma_aluno ta on (t.id_turma = ta.id_turma) inner join disciplina d on (t.id_disciplina = d.id_disciplina) where d.nome_disciplina = 'BD1' and t.semestre = 4;
+10) select count(*) as professores_informatica from professor p inner join area a on (p.id_area = a.id_area) where a.nome = 'Computacao';
+11) select t.id_turma, d.nome_disciplina, count(*) as alunos_matriculados
+from turma t 
+inner join disciplina d on (t.id_disciplina = d.id_disciplina) 
+inner join turma_aluno ta on (t.id_turma = ta.id_turma)
+where t.semestre = 5
+group by t.id_turma, d.nome_disciplina;
+12) select t.id_turma, d.nome_disciplina, count(*) as alunos_matriculados
+from turma t 
+inner join disciplina d on (t.id_disciplina = d.id_disciplina) 
+inner join turma_aluno ta on (t.id_turma = ta.id_turma)
+where t.semestre = 5
+group by t.id_turma, d.nome_disciplina
+having count(*) > 1;
+13) select a.NOME_ALUNO
+from turma t  
+inner join turma_aluno ta on (t.id_turma = ta.id_turma)
+inner join aluno a on (a.id_aluno = ta.id_aluno)
+where t.id_turma = 22 and ta.MEDIA_FINAL = (
+select max(ta2.media_final)
+from turma t2 
+inner join turma_aluno ta2 on (t2.id_turma = ta2.id_turma)
+inner join aluno a2 on (a2.id_aluno = ta2.id_aluno) 
+where t.id_turma = t2.id_turma
+);
+14) select a.NOME_ALUNO
+from turma t  
+inner join turma_aluno ta on (t.id_turma = ta.id_turma)
+inner join aluno a on (a.id_aluno = ta.id_aluno)
+inner join disciplina d on (t.id_disciplina = d.id_disciplina)
+where d.nome_disciplina = 'BD1' and t.semestre = 2 and ta.MEDIA_FINAL = (
+select max(ta2.media_final)
+from turma t2 
+inner join turma_aluno ta2 on (t2.id_turma = ta2.id_turma)
+inner join aluno a2 on (a2.id_aluno = ta2.id_aluno) 
+where t.id_turma = t2.id_turma
+);
+15) select d.NOME_DISCIPLINA, nvl(count(*), 0)
+from turma t
+left join disciplina d on (t.id_disciplina = d.id_disciplina) 
+where t.semestre = 1
+group by d.NOME_DISCIPLINA;
