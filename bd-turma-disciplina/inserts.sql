@@ -53,12 +53,12 @@ insert into turma_aluno values(25, 5, 70);
 insert into turma_aluno values(26, 6, 40);
 insert into turma_aluno values(27, 9, 55);
 insert into turma_aluno values(28, 10, 75);
-insert into turma_aluno values(1, 2, 95);
-insert into turma_aluno values(2, 7, 15);
-insert into turma_aluno values(5, 3, 35);
-insert into turma_aluno values(3, 8, 100);
-insert into turma_aluno values(7, 3, 75);
-insert into turma_aluno values(8, 5, 80);
+insert into turma_aluno values(16, 2, 95);
+insert into turma_aluno values(17, 7, 15);
+insert into turma_aluno values(18, 3, 35);
+insert into turma_aluno values(19, 8, 100);
+insert into turma_aluno values(20, 3, 75);
+insert into turma_aluno values(21, 5, 80);
 
 
 insert into professor values (professor_SEQ.nextval, 'Tanisi', 6, 1);
