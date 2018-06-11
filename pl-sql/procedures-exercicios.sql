@@ -1,10 +1,3 @@
-3.	Criar uma procedure utilizando cursores que apresenta na tela os nomes dos alunos que estão cursando uma determinada disciplina em um semestre (estas duas informações são parâmetros de entrada:nome da disciplina e semestre).
-4.	Criar uma procedure que recebe o id_curso e retorna em um parâmetro o nome do curso. Utilizar INTO e exception para testar se nenhum curso foi encontrado com aquele código.
-5.	Fazer uma função de retorna o número de linhas deletadas da tabela turma_aluno (o parâmetro de entrada é o id_turma e id_aluno que deve ser do tipo <tablela>%type).
-6.	Alterar a tabela professor e adicionar a coluna status (ativo,  afastado). Criar uma trigger que não permita que um professor seja alocado para uma turma se ele estiver afastado.
-7.	 Criar uma função que apresenta a quantidade de alunos de um determinado curso
-8.	Criar uma função que apresenta o total de disciplinas em que um aluno está matriculado em um determinado semestre.
-
 1) Criar uma procedure que insere dados na tabela turma.
 CREATE OR REPLACE PROCEDURE p_insere_turma IS 
 
@@ -64,6 +57,54 @@ DBMS_OUTPUT.PUT_LINE(v_nome);
 EXCEPTION
 WHEN no_data_found THEN
 raise_application_error(-20001, 'Curso nao existe!');
+end;
+/
+show errors;
+
+5) Fazer uma função de retorna o número de linhas deletadas da tabela turma_aluno (o parâmetro de entrada é o id_turma e id_aluno que deve ser do tipo <tablela>%type)
+CREATE OR REPLACE FUNCTION f_delete_ta_linhas(v_id_turma IN turma_aluno.id_turma%type, v_id_aluno IN turma_aluno.id_aluno%type)
+RETURN NUMBER IS
+begin
+delete from turma_aluno
+where id_turma = v_id_turma
+and id_aluno = v_id_aluno;
+
+DBMS_OUTPUT.PUT_LINE('Linhas deletadas='||SQL%ROWCOUNT);
+
+return SQL%ROWCOUNT;
+end;
+/
+show errors;
+
+6) Alterar a tabela professor e adicionar a coluna status (ativo,  afastado). Criar uma trigger que não permita que um professor seja alocado para uma turma se ele estiver afastado.
+
+7) Criar uma função que apresenta a quantidade de alunos de um determinado curso
+CREATE OR REPLACE FUNCTION f_quantidade_alunos(v_id_curso IN aluno_curso.id_curso%type) RETURN NUMBER IS
+v_sum NUMBER;
+BEGIN
+select count(*)
+into v_sum
+from aluno_curso
+where id_curso = v_id_curso;
+
+return v_sum;
+end;
+/
+show errors;
+
+8) Criar uma função que apresenta o total de disciplinas em que um aluno está matriculado em um determinado semestre.
+sem = 1, id_aluno = 5
+CREATE OR REPLACE FUNCTION f_disc_aluno_matriculado(v_id_aluno IN turma_aluno.id_aluno%type, v_sem IN turma.semestre%type) RETURN NUMBER IS
+v_sum NUMBER;
+begin
+select count(*)
+into v_sum
+from turma t
+inner join turma_aluno ta on t.id_turma = ta.id_turma
+where t.semestre = v_sem
+and ta.id_aluno = v_id_aluno;
+
+return v_sum;
 end;
 /
 show errors;
